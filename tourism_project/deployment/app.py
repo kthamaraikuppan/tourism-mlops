@@ -99,4 +99,4 @@ if st.button("Predict"):
         st.warning(f"❌ Customer is UNLIKELY to purchase the Wellness Package  (Probability: {probability:.2%})")
 
 # Timestamp to force content change for deployment (to bypass 'No files modified' issue)
-# Last updated: " + str(datetime.datetime.now())
+st.write("Last updated: " + str(datetime.datetime.now()))
