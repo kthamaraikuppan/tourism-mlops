@@ -11,6 +11,9 @@ os.environ["HF_TOKEN"] = HF_TOKEN # Ensure it's in the environment for hf_hub_do
 HF_USERNAME = "kthamaraikannan"  # Set your actual Hugging Face username here
 MODEL_REPO  = f"{HF_USERNAME}/tourism-package-model"
 
+# Debugging line: Print the HF_TOKEN to the Streamlit logs
+print(f"HF_TOKEN status (first 5 chars): {HF_TOKEN[:5] if HF_TOKEN else 'None/Empty'}")
+
 @st.cache_resource
 def load_model():
     # 2. Load the model
