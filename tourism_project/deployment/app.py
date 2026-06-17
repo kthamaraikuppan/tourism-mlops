@@ -3,7 +3,6 @@ import joblib
 import pandas as pd
 import streamlit as st
 from huggingface_hub import hf_hub_download
-import datetime
 
 # 1. Download the model from HF Model Hub
 # HF_TOKEN needs to be set as an environment variable in the Hugging Face Space
@@ -65,8 +64,7 @@ product_pitched = st.selectbox("Product Pitched", ["Basic", "Standard", "Deluxe"
 designation     = st.selectbox("Designation", ["Executive", "Manager", "Senior Manager", "AVP", "VP"])
 
 # 5. Prepare input data
-input_data = pd.DataFrame([
-    {
+input_data = pd.DataFrame([{
     "Age":                    age,
     "CityTier":               city_tier,
     "DurationOfPitch":        duration_of_pitch,
@@ -85,8 +83,7 @@ input_data = pd.DataFrame([
     "ProductPitched":         product_pitched,
     "MaritalStatus":          marital_status,
     "Designation":            designation,
-    }
-])
+}])
 
 # 6. Predict button
 if st.button("Predict"):
@@ -97,6 +94,3 @@ if st.button("Predict"):
         st.success(f"✅ Customer is LIKELY to purchase the Wellness Package  (Probability: {probability:.2%})")
     else:
         st.warning(f"❌ Customer is UNLIKELY to purchase the Wellness Package  (Probability: {probability:.2%})")
-
-# Timestamp to force content change for deployment (to bypass 'No files modified' issue)
-st.write("Last updated: " + str(datetime.datetime.now()))
