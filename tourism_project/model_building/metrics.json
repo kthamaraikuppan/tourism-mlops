@@ -1,0 +1,15 @@
+{
+  "params": {
+    "classifier__max_depth": null,
+    "classifier__min_samples_split": 2,
+    "classifier__n_estimators": 100
+  },
+  "metrics": {
+    "train_accuracy": 1.0,
+    "test_accuracy": 0.9213075060532687,
+    "precision": 0.9433962264150944,
+    "recall": 0.6289308176100629,
+    "f1_score": 0.7547169811320755,
+    "roc_auc": 0.9709956342583426
+  }
+}
