@@ -5,9 +5,9 @@ import streamlit as st
 from huggingface_hub import hf_hub_download
 
 # 1. Download the model from HF Model Hub
-from google.colab import userdata
-HF_TOKEN = userdata.get("HF_TOKEN")
-os.environ["HF_TOKEN"] = HF_TOKEN
+# HF_TOKEN needs to be set as an environment variable in the Hugging Face Space
+HF_TOKEN = os.environ.get("HF_TOKEN")
+os.environ["HF_TOKEN"] = HF_TOKEN # Ensure it's in the environment for hf_hub_download
 HF_USERNAME = "kthamaraikannan"  # Set your actual Hugging Face username here
 MODEL_REPO  = f"{HF_USERNAME}/tourism-package-model"
 
