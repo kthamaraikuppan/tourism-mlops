@@ -4,19 +4,22 @@ import pandas as pd
 import streamlit as st
 from huggingface_hub import hf_hub_download
 
-# 1. Download the model from HF Model Hub
-# HF_TOKEN needs to be set as an environment variable in the Hugging Face Space
-HF_TOKEN = os.environ.get("HF_TOKEN")
-os.environ["HF_TOKEN"] = HF_TOKEN # Ensure it's in the environment for hf_hub_download
-HF_USERNAME = "kthamaraikannan"  # Set your actual Hugging Face username here
-MODEL_REPO  = f"{HF_USERNAME}/tourism-package-model"
+# --- MONKEY-PATCH FOR VERSION MISMATCH ---
+import sklearn.compose._column_transformer
+if not hasattr(sklearn.compose._column_transformer, "_RemainderColsList"):
+    class _RemainderColsList(list):
+        pass
+    sklearn.compose._column_transformer._RemainderColsList = _RemainderColsList
+# -----------------------------------------
 
-# Debugging line: Print the HF_TOKEN to the Streamlit logs
-print(f"HF_TOKEN status (first 5 chars): {HF_TOKEN[:5] if HF_TOKEN else 'None/Empty'}")
+# 1. Download the model from HF Model Hub
+HF_TOKEN = os.environ.get("HF_TOKEN")
+os.environ["HF_TOKEN"] = HF_TOKEN
+HF_USERNAME = "kthamaraikannan"
+MODEL_REPO  = f"{HF_USERNAME}/tourism-package-model"
 
 @st.cache_resource
 def load_model():
-    # 2. Load the model
     path = hf_hub_download(
         repo_id=MODEL_REPO,
         filename="best_model.joblib",
@@ -63,26 +66,26 @@ marital_status  = st.selectbox("Marital Status", ["Single", "Married", "Divorced
 product_pitched = st.selectbox("Product Pitched", ["Basic", "Standard", "Deluxe", "Super Deluxe", "King"])
 designation     = st.selectbox("Designation", ["Executive", "Manager", "Senior Manager", "AVP", "VP"])
 
-# 5. Prepare input data
+# 5. Prepare input data with correct column ordering
 input_data = pd.DataFrame([{
-    "Age":                    age,
-    "CityTier":               city_tier,
-    "DurationOfPitch":        duration_of_pitch,
+    "Age": age,
+    "TypeofContact": type_of_contact,
+    "CityTier": city_tier,
+    "DurationOfPitch": duration_of_pitch,
+    "Occupation": occupation,
+    "Gender": gender,
     "NumberOfPersonVisiting": num_person_visiting,
-    "NumberOfFollowups":      num_followups,
-    "PreferredPropertyStar":  preferred_star,
-    "NumberOfTrips":          num_trips,
-    "Passport":               1 if passport == "Yes" else 0,
-    "PitchSatisfactionScore": pitch_satisfaction,
-    "OwnCar":                 1 if own_car == "Yes" else 0,
+    "PreferredPropertyStar": preferred_star,
+    "MaritalStatus": marital_status,
+    "NumberOfTrips": num_trips,
+    "Passport": 1 if passport == "Yes" else 0,
+    "OwnCar": 1 if own_car == "Yes" else 0,
     "NumberOfChildrenVisiting": num_children,
-    "MonthlyIncome":          monthly_income,
-    "TypeofContact":          type_of_contact,
-    "Occupation":             occupation,
-    "Gender":                 gender,
-    "ProductPitched":         product_pitched,
-    "MaritalStatus":          marital_status,
-    "Designation":            designation,
+    "Designation": designation,
+    "MonthlyIncome": monthly_income,
+    "PitchSatisfactionScore": pitch_satisfaction,
+    "ProductPitched": product_pitched,
+    "NumberOfFollowups": num_followups
 }])
 
 # 6. Predict button
